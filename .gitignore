@@ -2,3 +2,6 @@ go-audio-video-publisher
 bin/
 agora_rtc_log/
 .DS_Store
+clips/
+encoded_assets/
+raw_assets/
