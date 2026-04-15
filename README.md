@@ -70,11 +70,17 @@ ffmpeg -hide_banner -y \
   clips/clip_35m_40m.mp4
 ```
 
+For repeat use, treat the extracted clip as a variable:
+
+```bash
+CLIP_MP4=clips/clip_35m_40m.mp4
+```
+
 Create the audio asset used by the working sender:
 
 ```bash
 ffmpeg -hide_banner -y \
-  -i clips/clip_35m_40m.mp4 \
+  -i "$CLIP_MP4" \
   -vn \
   -ac 1 \
   -ar 16000 \
@@ -86,7 +92,7 @@ Create the preferred encoded H.264 video asset used by the working sender:
 
 ```bash
 ffmpeg -hide_banner -y \
-  -i clips/clip_35m_40m.mp4 \
+  -i "$CLIP_MP4" \
   -an \
   -vf scale=1280:720,fps=25 \
   -pix_fmt yuv420p \
@@ -115,7 +121,7 @@ If you need a lower-bitrate compatibility fallback, this older 352x288 recipe al
 
 ```bash
 ffmpeg -hide_banner -y \
-  -i clips/clip_35m_40m.mp4 \
+  -i "$CLIP_MP4" \
   -an \
   -vf scale=352:288,fps=25 \
   -pix_fmt yuv420p \
@@ -149,6 +155,12 @@ The sender will:
 - publish video first
 - start audio after a short warmup
 - loop both assets
+
+To publish a different extracted clip later, just change:
+
+- `CLIP_MP4`
+- the output asset filenames under `raw_assets/` and `encoded_assets/`
+- the two file arguments passed to `send_h264_pcm_uid73.go`
 
 To use a different int UID in the reference sender, update both occurrences of `73` in [reference/agora_go_sdk/send_h264_pcm_uid73.go](/Users/benweekes/work/codex/go-audio-video-publisher/reference/agora_go_sdk/send_h264_pcm_uid73.go):
 
